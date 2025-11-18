@@ -59,6 +59,12 @@ const CONFIG = {
         ESCAPE: 'Escape'
     },
     
+    // Control Schemes
+    CONTROL_SCHEMES: {
+        ARROWS: 'arrows',
+        WASD: 'wasd'
+    },
+    
     // Colors
     COLORS: {
         PLAYER1: '#ff6b6b',

@@ -7,6 +7,8 @@ A feature-rich, modular 2-player Pong game with **3 game modes**, power-ups, pro
 ### 🤖 Single Player
 - Play against smart AI opponent
 - AI predicts ball trajectory and adapts to your play style
+- **Choose your controls**: Arrow keys (⬆️⬇️) or W/S keys
+- **Default control**: Arrow keys for more intuitive gameplay
 - Perfect for practice or when playing alone
 
 ### 👥 Two Players (Classic)
@@ -36,6 +38,8 @@ Uses physical key positions instead of characters, so W/S and Arrow keys work re
 ## 🌟 Features
 
 ### Core Gameplay
+- **Fixed Movement Controls**: No more stuck paddles! Improved key handling prevents movement issues
+- **Flexible Controls (Single Player)**: Choose between Arrow keys (default, more intuitive) or W/S keys
 - **Advanced Ball Control**: Hit different parts of your paddle to control ball direction
   - Top of paddle → Ball goes UP ⬆️
   - Center → Ball goes STRAIGHT ➡️
@@ -64,11 +68,15 @@ Uses physical key positions instead of characters, so W/S and Arrow keys work re
 ## 🎯 How to Play
 
 1. **Open the game:** Double-click `index.html`
-2. **Player 1 (Left):** W (up) / S (down)
-3. **Player 2 (Right):** Arrow Up / Arrow Down
-4. **Press SPACE** to start/pause
-5. **Press R** to restart
-6. **Press ?** for help menu
+2. **Select game mode:** Choose Single Player, Two Players, or Tournament
+3. **Single Player:** Choose your preferred controls (Arrow keys or W/S)
+4. **Controls:**
+   - **Single Player:** Your choice of Arrow keys or W/S keys
+   - **Player 1 (Two Player):** W (up) / S (down)
+   - **Player 2 (Two Player):** Arrow Up / Arrow Down
+5. **Press SPACE** to start/pause
+6. **Press R** to restart and change mode
+7. **Press ?** for help menu
 
 ## 📁 Project Structure (Modular Architecture)
 

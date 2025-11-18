@@ -27,23 +27,67 @@ document.addEventListener('DOMContentLoaded', () => {
     const twoPlayerBtn = document.getElementById('twoPlayerBtn');
     const threePlayerBtn = document.getElementById('threePlayerBtn');
     
+    // Control scheme selection
+    const controlSchemeSelection = document.getElementById('controlSchemeSelection');
+    const arrowKeysBtn = document.getElementById('arrowKeysBtn');
+    const wasdKeysBtn = document.getElementById('wasdKeysBtn');
+    
     singlePlayerBtn.onclick = () => {
-        game.setGameMode(GAME_MODES.SINGLE_PLAYER);
+        // Show control scheme selection for single player
+        document.querySelector('.mode-selection').style.display = 'none';
+        document.querySelector('.mode-description').style.display = 'none';
+        controlSchemeSelection.style.display = 'block';
+    };
+    
+    arrowKeysBtn.onclick = () => {
+        game.setGameMode(GAME_MODES.SINGLE_PLAYER, CONFIG.CONTROL_SCHEMES.ARROWS);
         modeModal.style.display = 'none';
-        updatePlayerNames('Player 1', 'Computer 🤖');
+        resetModeModal();
+        updatePlayerNames('Player', 'Computer 🤖');
+        updateControlDisplay('Arrow Keys');
+    };
+    
+    wasdKeysBtn.onclick = () => {
+        game.setGameMode(GAME_MODES.SINGLE_PLAYER, CONFIG.CONTROL_SCHEMES.WASD);
+        modeModal.style.display = 'none';
+        resetModeModal();
+        updatePlayerNames('Player', 'Computer 🤖');
+        updateControlDisplay('W/S Keys');
     };
     
     twoPlayerBtn.onclick = () => {
         game.setGameMode(GAME_MODES.TWO_PLAYER);
         modeModal.style.display = 'none';
+        resetModeModal();
         updatePlayerNames('Player 1', 'Player 2');
+        updateControlDisplay('W/S Keys', '↑/↓ Keys');
     };
     
     threePlayerBtn.onclick = () => {
         game.setGameMode(GAME_MODES.THREE_PLAYER);
         modeModal.style.display = 'none';
+        resetModeModal();
         updatePlayerNames('Player 1', 'Player 2');
+        updateControlDisplay('W/S Keys', '↑/↓ Keys');
     };
+    
+    function resetModeModal() {
+        // Reset modal view for next time
+        document.querySelector('.mode-selection').style.display = 'grid';
+        document.querySelector('.mode-description').style.display = 'block';
+        controlSchemeSelection.style.display = 'none';
+    }
+    
+    function updatePlayerNames(p1Name, p2Name) {
+        document.getElementById('player1Name').textContent = p1Name;
+        document.getElementById('player2Name').textContent = p2Name;
+    }
+    
+    function updateControlDisplay(p1Controls, p2Controls) {
+        const controlElements = document.querySelectorAll('.controls');
+        if (controlElements[0]) controlElements[0].textContent = p1Controls || 'W/S Keys';
+        if (controlElements[1]) controlElements[1].textContent = p2Controls || '↑/↓ Keys';
+    }
     
     helpBtn.onclick = () => {
         helpModal.style.display = 'block';
@@ -55,6 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     resetBtn.onclick = () => {
         modeModal.style.display = 'block';
+        resetModeModal();
     };
     
     window.onclick = (event) => {
@@ -62,11 +107,6 @@ document.addEventListener('DOMContentLoaded', () => {
             helpModal.style.display = 'none';
         }
     };
-    
-    function updatePlayerNames(p1Name, p2Name) {
-        document.getElementById('player1Name').textContent = p1Name;
-        document.getElementById('player2Name').textContent = p2Name;
-    }
     
     // Start the game
     game.start();

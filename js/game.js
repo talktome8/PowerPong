@@ -74,18 +74,33 @@ class Game {
         document.addEventListener('keyup', (e) => {
             this.keys[e.code] = false;
         });
+        
+        // Fix for stuck keys when window loses focus
+        window.addEventListener('blur', () => {
+            this.keys = {};
+        });
+        
+        // Clear all keys when window regains focus
+        window.addEventListener('focus', () => {
+            this.keys = {};
+        });
     }
     
-    setGameMode(mode) {
+    setGameMode(mode, controlScheme) {
         this.gameMode = mode;
         
         if (mode === GAME_MODES.SINGLE_PLAYER) {
             this.aiPlayer = new AIPlayer(this.player2, 'MEDIUM');
+            // Set control scheme for player 1 in single player mode
+            // Default to ARROWS if not specified (more intuitive)
+            this.player1.controlScheme = controlScheme || CONFIG.CONTROL_SCHEMES.ARROWS;
         } else if (mode === GAME_MODES.THREE_PLAYER) {
             this.tournament = new TournamentManager();
+            this.player1.controlScheme = null; // Reset to default two-player controls
         } else {
             this.aiPlayer = null;
             this.tournament = null;
+            this.player1.controlScheme = null; // Reset to default two-player controls
         }
         
         this.reset();

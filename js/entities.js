@@ -16,6 +16,7 @@ class Paddle {
         this.powerUpTime = 0;
         this.combo = 0;
         this.lastHitTime = 0;
+        this.controlScheme = null; // For single player mode
     }
     
     update(keys, currentTime) {
@@ -43,11 +44,20 @@ class Paddle {
         
         if (!this.stunned) {
             if (this.isPlayer1) {
-                // Use key codes instead of characters
-                if (keys[CONFIG.KEYS.W]) {
-                    this.dy = -speed;
-                } else if (keys[CONFIG.KEYS.S]) {
-                    this.dy = speed;
+                // In single player mode, use the selected control scheme
+                if (this.controlScheme === CONFIG.CONTROL_SCHEMES.ARROWS) {
+                    if (keys[CONFIG.KEYS.ARROW_UP]) {
+                        this.dy = -speed;
+                    } else if (keys[CONFIG.KEYS.ARROW_DOWN]) {
+                        this.dy = speed;
+                    }
+                } else {
+                    // Default to W/S or when controlScheme is not set (two player mode)
+                    if (keys[CONFIG.KEYS.W]) {
+                        this.dy = -speed;
+                    } else if (keys[CONFIG.KEYS.S]) {
+                        this.dy = speed;
+                    }
                 }
             } else {
                 if (keys[CONFIG.KEYS.ARROW_UP]) {
