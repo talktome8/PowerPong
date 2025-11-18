@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2-Player Pong Game 🎮</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="menu-bar">
+        <div class="menu-left">
+            <h1>❤️ Couples Pong Game ❤️</h1>
+        </div>
+        <div class="menu-right">
+            <button id="helpBtn" class="help-btn" title="How to Play">❓</button>
+            <button id="resetBtn" class="reset-btn" title="Reset Game">🔄</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="scoreboard">
+            <div class="player">
+                <h2 id="player1Name">Player 1</h2>
+                <div id="score1" class="score">0</div>
+                <div class="controls">W/S Keys</div>
+            </div>
+            <div class="vs">VS</div>
+            <div class="player">
+                <h2 id="player2Name">Player 2</h2>
+                <div id="score2" class="score">0</div>
+                <div class="controls">↑/↓ Keys</div>
+            </div>
+        </div>
+        <canvas id="gameCanvas" width="800" height="400"></canvas>
+        <div id="gameStatus" class="game-status"></div>
+    </div>
+
+    <!-- Game Mode Selection Menu -->
+    <div id="modeModal" class="modal">
+        <div class="modal-content">
+            <h2>🎮 Select Game Mode 🎮</h2>
+            <div class="mode-selection">
+                <button class="mode-btn" id="singlePlayerBtn">
+                    <div class="mode-icon">🤖</div>
+                    <h3>Single Player</h3>
+                    <p>Play against AI</p>
+                </button>
+                <button class="mode-btn" id="twoPlayerBtn">
+                    <div class="mode-icon">👥</div>
+                    <h3>Two Players</h3>
+                    <p>Classic head-to-head</p>
+                </button>
+                <button class="mode-btn" id="threePlayerBtn">
+                    <div class="mode-icon">🏆</div>
+                    <h3>Three Players</h3>
+                    <p>Tournament mode!</p>
+                </button>
+            </div>
+            <div class="mode-description">
+                <h4>🏆 Three Player Tournament:</h4>
+                <p>• Round-robin: Everyone plays everyone</p>
+                <p>• Special final battles based on standings</p>
+                <p>• Epic championship matches!</p>
+                <p>• Most points wins the tournament</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div id="helpModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>🎮 How to Play</h2>
+            <div class="help-section">
+                <h3>Controls:</h3>
+                <p><strong>Player 1 (Left - Red Paddle):</strong> W (up) and S (down) keys</p>
+                <p><strong>Player 2 (Right - Cyan Paddle):</strong> Arrow Up and Arrow Down keys</p>
+            </div>
+            <div class="help-section">
+                <h3>🎯 Advanced Ball Control:</h3>
+                <p>💡 <strong>Hit Direction:</strong> Where you hit the ball on your paddle matters!</p>
+                <p>🔝 Hit the <strong>top</strong> of your paddle → Ball goes UP</p>
+                <p>🎯 Hit the <strong>center</strong> → Ball goes STRAIGHT</p>
+                <p>🔽 Hit the <strong>bottom</strong> → Ball goes DOWN</p>
+                <p>⭐ Use this to <strong>aim for power-ups</strong> and control the game!</p>
+            </div>
+            <div class="help-section">
+                <h3>Game Rules:</h3>
+                <p>🎯 First to <strong>10 points</strong> wins!</p>
+                <p>⏱️ <strong>Timer</strong> tracks your game time</p>
+                <p>📈 Game gets <strong>harder every 30 seconds</strong></p>
+                <p>🏆 Score by getting the ball past your opponent</p>
+            </div>
+            <div class="help-section">
+                <h3>🎁 Power-Ups:</h3>
+                <p>⚡ <strong>Super Speed</strong> - Move faster (5s)</p>
+                <p>📏 <strong>Bigger Paddle</strong> - Increase paddle size (5s)</p>
+                <p>❄️ <strong>Freeze</strong> - Stun opponent (3s)</p>
+                <p>👻 <strong>Invisible Ball</strong> - Ball becomes hard to see (4s)</p>
+                <p>🎯 <strong>Multi-Ball</strong> - Creates 2 extra balls</p>
+                <p>🌀 <strong>Curve Ball</strong> - Ball curves unpredictably (5s)</p>
+                <p>🐌 <strong>Slow Motion</strong> - Ball slows down (5s)</p>
+            </div>
+            <div class="help-section">
+                <h3>🔥 Special Features:</h3>
+                <p>🧱 <strong>Moving Obstacles</strong> appear after 5 total points</p>
+                <p>🎲 <strong>Combo System</strong> - Chain hits for multipliers!</p>
+                <p>✨ <strong>Particle Effects</strong> on every hit</p>
+                <p>� <strong>Difficulty Levels</strong> increase over time</p>
+                <p>🌟 <strong>Ball Trail</strong> effect for better tracking</p>
+            </div>
+            <div class="help-section">
+                <h3>Shortcuts:</h3>
+                <p><strong>SPACE</strong> - Start/Pause the game</p>
+                <p><strong>R</strong> - Restart the game</p>
+                <p><strong>?</strong> - Show this help menu</p>
+                <p><strong>ESC</strong> - Close this menu</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load scripts in correct order -->
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/particles.js"></script>
+    <script src="js/entities.js"></script>
+    <script src="js/ai.js"></script>
+    <script src="js/tournament.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
