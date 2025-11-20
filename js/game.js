@@ -4,6 +4,7 @@ class Game {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
         this.keys = {};
+        this.touchControls = { up: false, down: false };
         
         // Game mode
         this.gameMode = GAME_MODES.TWO_PLAYER;
@@ -49,6 +50,13 @@ class Game {
     }
     
     setupEventListeners() {
+        // Prevent default arrow key scrolling
+        window.addEventListener('keydown', (e) => {
+            if (['ArrowUp', 'ArrowDown', 'Space'].includes(e.code)) {
+                e.preventDefault();
+            }
+        }, false);
+        
         document.addEventListener('keydown', (e) => {
             // Use e.code instead of e.key for language independence
             this.keys[e.code] = true;
@@ -84,23 +92,65 @@ class Game {
         window.addEventListener('focus', () => {
             this.keys = {};
         });
+        
+        // Mobile touch controls
+        this.setupTouchControls();
+    }
+    
+    setupTouchControls() {
+        const touchUp = document.getElementById('touchUp');
+        const touchDown = document.getElementById('touchDown');
+        
+        if (touchUp && touchDown) {
+            // Touch start
+            touchUp.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                this.touchControls.up = true;
+                touchUp.classList.add('pressed');
+            });
+            
+            touchDown.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                this.touchControls.down = true;
+                touchDown.classList.add('pressed');
+            });
+            
+            // Touch end
+            touchUp.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                this.touchControls.up = false;
+                touchUp.classList.remove('pressed');
+            });
+            
+            touchDown.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                this.touchControls.down = false;
+                touchDown.classList.remove('pressed');
+            });
+            
+            // Prevent context menu
+            touchUp.addEventListener('contextmenu', (e) => e.preventDefault());
+            touchDown.addEventListener('contextmenu', (e) => e.preventDefault());
+        }
     }
     
     setGameMode(mode, controlScheme) {
         this.gameMode = mode;
         
         if (mode === GAME_MODES.SINGLE_PLAYER) {
-            this.aiPlayer = new AIPlayer(this.player2, 'MEDIUM');
-            // Set control scheme for player 1 in single player mode
-            // Default to ARROWS if not specified (more intuitive)
-            this.player1.controlScheme = controlScheme || CONFIG.CONTROL_SCHEMES.ARROWS;
+            // In single player, swap paddles: player on right, AI on left
+            this.aiPlayer = new AIPlayer(this.player1, 'VERY_EASY'); // AI controls left paddle, starts very easy
+            this.player2.controlScheme = controlScheme || CONFIG.CONTROL_SCHEMES.ARROWS; // Player controls right paddle
+            this.player1.controlScheme = null; // AI doesn't need control scheme
         } else if (mode === GAME_MODES.THREE_PLAYER) {
             this.tournament = new TournamentManager();
             this.player1.controlScheme = null; // Reset to default two-player controls
+            this.player2.controlScheme = null;
         } else {
             this.aiPlayer = null;
             this.tournament = null;
             this.player1.controlScheme = null; // Reset to default two-player controls
+            this.player2.controlScheme = null;
         }
         
         this.reset();
@@ -139,14 +189,18 @@ class Game {
         // Update difficulty
         this.updateDifficulty(currentTime);
         
-        // Update entities
-        this.player1.update(this.keys, currentTime);
-        
-        // Update player 2 or AI
+        // Update entities based on game mode
         if (this.gameMode === GAME_MODES.SINGLE_PLAYER && this.aiPlayer) {
+            // Single player: AI controls player1 (left), human controls player2 (right)
+            // Don't update player1 with keys - AI does it
+            this.aiPlayer.updateDifficulty(this.player2.score, this.elapsedTime);
             this.aiPlayer.update(this.ball, currentTime, this.extraBalls);
+            // Update human player (player2) with touch controls
+            this.player2.update(this.keys, currentTime, this.touchControls);
         } else {
-            this.player2.update(this.keys, currentTime);
+            // Two player or tournament: both paddles controlled by keys
+            this.player1.update(this.keys, currentTime);
+            this.player2.update(this.keys, currentTime, this.touchControls);
         }
         
         this.ball.update(currentTime);
@@ -211,14 +265,18 @@ class Game {
     checkScoring() {
         // Main ball
         if (this.ball.x - this.ball.radius <= 0) {
-            this.player2.score++;
-            this.player2.combo = 0;
+            // Ball went past left paddle - right player (player2) scores
+            const comboBonus = Math.floor(this.player2.combo / 3); // Bonus point for every 3 combo hits
+            this.player2.score += (1 + comboBonus);
+            this.player1.combo = 0; // Reset losing player's combo
             this.updateScore();
             this.checkGameOver();
             this.ball.reset();
         } else if (this.ball.x + this.ball.radius >= CONFIG.CANVAS_WIDTH) {
-            this.player1.score++;
-            this.player1.combo = 0;
+            // Ball went past right paddle - left player (player1) scores
+            const comboBonus = Math.floor(this.player1.combo / 3); // Bonus point for every 3 combo hits
+            this.player1.score += (1 + comboBonus);
+            this.player2.combo = 0; // Reset losing player's combo
             this.updateScore();
             this.checkGameOver();
             this.ball.reset();
@@ -227,11 +285,13 @@ class Game {
         // Extra balls
         this.extraBalls = this.extraBalls.filter(eb => {
             if (eb.x - eb.radius <= 0) {
-                this.player2.score++;
+                const comboBonus = Math.floor(this.player2.combo / 3);
+                this.player2.score += (1 + comboBonus);
                 this.updateScore();
                 return false;
             } else if (eb.x + eb.radius >= CONFIG.CANVAS_WIDTH) {
-                this.player1.score++;
+                const comboBonus = Math.floor(this.player1.combo / 3);
+                this.player1.score += (1 + comboBonus);
                 this.updateScore();
                 return false;
             }
@@ -513,9 +573,13 @@ class Game {
                 const winner = this.tournament.getWinner();
                 const timeStr = Utils.formatTime(this.elapsedTime);
                 statusDiv.textContent = `🏆 Tournament Winner: ${winner.name}! 🏆 Press R to play again`;
+            } else if (this.gameMode === GAME_MODES.SINGLE_PLAYER) {
+                // In single player: player1 = AI (left), player2 = Human (right)
+                const winner = this.player2.score >= CONFIG.WINNING_SCORE ? 'You' : 'Computer';
+                const timeStr = Utils.formatTime(this.elapsedTime);
+                statusDiv.textContent = `🎉 ${winner} Win! Time: ${timeStr} 🎉 Press R to play again`;
             } else {
-                const winner = this.player1.score >= CONFIG.WINNING_SCORE ? 'Player 1' : 
-                              (this.gameMode === GAME_MODES.SINGLE_PLAYER ? 'Computer' : 'Player 2');
+                const winner = this.player1.score >= CONFIG.WINNING_SCORE ? 'Player 1' : 'Player 2';
                 const timeStr = Utils.formatTime(this.elapsedTime);
                 statusDiv.textContent = `🎉 ${winner} Wins! Time: ${timeStr} 🎉 Press R to play again`;
             }

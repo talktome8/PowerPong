@@ -19,7 +19,7 @@ class Paddle {
         this.controlScheme = null; // For single player mode
     }
     
-    update(keys, currentTime) {
+    update(keys, currentTime, touchControls = null) {
         // Handle stun
         if (this.stunned && currentTime - this.stunnedTime > CONFIG.FREEZE_DURATION) {
             this.stunned = false;
@@ -36,34 +36,44 @@ class Paddle {
             this.combo = 0;
         }
         
-        // Calculate speed
-        const speed = (this.powerUp === 'speed' ? CONFIG.PADDLE_SPEED * 1.8 : CONFIG.PADDLE_SPEED);
+        // Calculate speed - increased base speed for better responsiveness
+        const speed = (this.powerUp === 'speed' ? CONFIG.PADDLE_SPEED * 2.0 : CONFIG.PADDLE_SPEED * 1.2);
         
         // Reset dy first
         this.dy = 0;
         
         if (!this.stunned) {
-            if (this.isPlayer1) {
-                // In single player mode, use the selected control scheme
-                if (this.controlScheme === CONFIG.CONTROL_SCHEMES.ARROWS) {
-                    if (keys[CONFIG.KEYS.ARROW_UP]) {
-                        this.dy = -speed;
-                    } else if (keys[CONFIG.KEYS.ARROW_DOWN]) {
-                        this.dy = speed;
-                    }
-                } else {
-                    // Default to W/S or when controlScheme is not set (two player mode)
+            // Check if this paddle has a specific control scheme (single player mode)
+            if (this.controlScheme === CONFIG.CONTROL_SCHEMES.ARROWS) {
+                // Human player with arrow keys or touch controls
+                if (keys[CONFIG.KEYS.ARROW_UP] || (touchControls && touchControls.up)) {
+                    this.dy = -speed;
+                } else if (keys[CONFIG.KEYS.ARROW_DOWN] || (touchControls && touchControls.down)) {
+                    this.dy = speed;
+                }
+            } else if (this.controlScheme === CONFIG.CONTROL_SCHEMES.WASD) {
+                // Human player with W/S keys or touch controls
+                if (keys[CONFIG.KEYS.W] || (touchControls && touchControls.up)) {
+                    this.dy = -speed;
+                } else if (keys[CONFIG.KEYS.S] || (touchControls && touchControls.down)) {
+                    this.dy = speed;
+                }
+            } else {
+                // Default two-player controls (no controlScheme set)
+                if (this.isPlayer1) {
+                    // Player 1 (left): W/S keys
                     if (keys[CONFIG.KEYS.W]) {
                         this.dy = -speed;
                     } else if (keys[CONFIG.KEYS.S]) {
                         this.dy = speed;
                     }
-                }
-            } else {
-                if (keys[CONFIG.KEYS.ARROW_UP]) {
-                    this.dy = -speed;
-                } else if (keys[CONFIG.KEYS.ARROW_DOWN]) {
-                    this.dy = speed;
+                } else {
+                    // Player 2 (right): Arrow keys or touch
+                    if (keys[CONFIG.KEYS.ARROW_UP] || (touchControls && touchControls.up)) {
+                        this.dy = -speed;
+                    } else if (keys[CONFIG.KEYS.ARROW_DOWN] || (touchControls && touchControls.down)) {
+                        this.dy = speed;
+                    }
                 }
             }
         }
@@ -80,20 +90,24 @@ class Paddle {
             ctx.fillRect(this.x - 5, this.y - 5, this.width + 10, this.height + 10);
         }
         
-        // Draw movement indicator (brighter when moving)
+        // Draw movement indicator (brighter when moving) - enhanced visibility
         const isMoving = Math.abs(this.dy) > 0;
         if (isMoving) {
+            // Draw motion blur effect
             ctx.fillStyle = this.color;
-            ctx.globalAlpha = 0.5;
-            ctx.fillRect(this.x - 3, this.y - 3, this.width + 6, this.height + 6);
+            ctx.globalAlpha = 0.3;
+            const blurOffset = this.dy > 0 ? -8 : 8;
+            ctx.fillRect(this.x - 2, this.y + blurOffset, this.width + 4, this.height);
+            ctx.globalAlpha = 0.6;
+            ctx.fillRect(this.x - 4, this.y - 4, this.width + 8, this.height + 8);
             ctx.globalAlpha = 1.0;
         }
         
         ctx.fillStyle = this.color;
         ctx.fillRect(this.x, this.y, this.width, this.height);
         
-        // Glow effect
-        ctx.shadowBlur = isMoving ? 20 : 10;
+        // Stronger glow effect when moving
+        ctx.shadowBlur = isMoving ? 30 : 15;
         ctx.shadowColor = this.color;
         ctx.fillRect(this.x, this.y, this.width, this.height);
         ctx.shadowBlur = 0;

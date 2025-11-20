@@ -33,26 +33,38 @@ document.addEventListener('DOMContentLoaded', () => {
     const wasdKeysBtn = document.getElementById('wasdKeysBtn');
     
     singlePlayerBtn.onclick = () => {
-        // Show control scheme selection for single player
-        document.querySelector('.mode-selection').style.display = 'none';
-        document.querySelector('.mode-description').style.display = 'none';
-        controlSchemeSelection.style.display = 'block';
+        // Check if mobile device
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 900;
+        
+        if (isMobile) {
+            // On mobile, skip control selection and use touch controls
+            game.setGameMode(GAME_MODES.SINGLE_PLAYER, CONFIG.CONTROL_SCHEMES.ARROWS);
+            modeModal.style.display = 'none';
+            resetModeModal();
+            updatePlayerNames('Computer 🤖', 'Player');
+            updateControlDisplay('W/S Keys', 'Touch Controls');
+        } else {
+            // On desktop, show control scheme selection
+            document.querySelector('.mode-selection').style.display = 'none';
+            document.querySelector('.mode-description').style.display = 'none';
+            controlSchemeSelection.style.display = 'block';
+        }
     };
     
     arrowKeysBtn.onclick = () => {
         game.setGameMode(GAME_MODES.SINGLE_PLAYER, CONFIG.CONTROL_SCHEMES.ARROWS);
         modeModal.style.display = 'none';
         resetModeModal();
-        updatePlayerNames('Player', 'Computer 🤖');
-        updateControlDisplay('Arrow Keys');
+        updatePlayerNames('Computer 🤖', 'Player');
+        updateControlDisplay('W/S Keys', 'Arrow Keys');
     };
     
     wasdKeysBtn.onclick = () => {
         game.setGameMode(GAME_MODES.SINGLE_PLAYER, CONFIG.CONTROL_SCHEMES.WASD);
         modeModal.style.display = 'none';
         resetModeModal();
-        updatePlayerNames('Player', 'Computer 🤖');
-        updateControlDisplay('W/S Keys');
+        updatePlayerNames('Computer 🤖', 'Player');
+        updateControlDisplay('W/S Keys', 'W/S Keys');
     };
     
     twoPlayerBtn.onclick = () => {

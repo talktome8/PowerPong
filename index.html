@@ -31,8 +31,14 @@
                 <div class="controls">↑/↓ Keys</div>
             </div>
         </div>
-        <canvas id="gameCanvas" width="800" height="400"></canvas>
+        <canvas id="gameCanvas" width="1200" height="600"></canvas>
         <div id="gameStatus" class="game-status"></div>
+        
+        <!-- Mobile Touch Controls -->
+        <div id="mobileControls" class="mobile-controls" style="display: none;">
+            <div class="touch-button touch-up" id="touchUp">▲</div>
+            <div class="touch-button touch-down" id="touchDown">▼</div>
+        </div>
     </div>
 
     <!-- Game Mode Selection Menu -->
@@ -111,20 +117,25 @@
             </div>
             <div class="help-section">
                 <h3>🎁 Power-Ups:</h3>
-                <p>⚡ <strong>Super Speed</strong> - Move faster (5s)</p>
-                <p>📏 <strong>Bigger Paddle</strong> - Increase paddle size (5s)</p>
-                <p>❄️ <strong>Freeze</strong> - Stun opponent (3s)</p>
-                <p>👻 <strong>Invisible Ball</strong> - Ball becomes hard to see (4s)</p>
-                <p>🎯 <strong>Multi-Ball</strong> - Creates 2 extra balls</p>
-                <p>🌀 <strong>Curve Ball</strong> - Ball curves unpredictably (5s)</p>
-                <p>🐌 <strong>Slow Motion</strong> - Ball slows down (5s)</p>
+                <p>Power-ups appear randomly during the game. Hit them with the ball to activate!</p>
+                <p>⚡ <strong>Super Speed</strong> - YOU move faster for 5 seconds</p>
+                <p>📏 <strong>Bigger Paddle</strong> - YOUR paddle grows bigger for 5 seconds</p>
+                <p>❄️ <strong>Freeze</strong> - Freezes YOUR OPPONENT for 3 seconds (they can't move!)</p>
+                <p>👻 <strong>Invisible Ball</strong> - Ball becomes hard to see for 4 seconds</p>
+                <p>🎯 <strong>Multi-Ball</strong> - Creates 2 extra balls instantly</p>
+                <p>🌀 <strong>Curve Ball</strong> - Ball moves unpredictably for 5 seconds</p>
+                <p>🐌 <strong>Slow Motion</strong> - Ball slows down for 5 seconds</p>
+                <p><em>💡 Tip: Power-ups help the player who hits them with the ball!</em></p>
             </div>
             <div class="help-section">
                 <h3>🔥 Special Features:</h3>
+                <p>🎲 <strong>Combo System</strong> - Chain paddle hits for bonus points!</p>
+                <p>   • Hit the ball 3 times in a row = +1 bonus point when you score</p>
+                <p>   • Hit the ball 6 times in a row = +2 bonus points when you score</p>
+                <p>   • Your combo resets if you miss or if 3 seconds pass without hitting</p>
                 <p>🧱 <strong>Moving Obstacles</strong> appear after 5 total points</p>
-                <p>🎲 <strong>Combo System</strong> - Chain hits for multipliers!</p>
                 <p>✨ <strong>Particle Effects</strong> on every hit</p>
-                <p>� <strong>Difficulty Levels</strong> increase over time</p>
+                <p>📊 <strong>Difficulty Levels</strong> increase over time</p>
                 <p>🌟 <strong>Ball Trail</strong> effect for better tracking</p>
             </div>
             <div class="help-section">

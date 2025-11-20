@@ -1,14 +1,49 @@
 // AI Player Controller
 class AIPlayer {
-    constructor(paddle, difficulty = 'MEDIUM') {
+    constructor(paddle, difficulty = 'VERY_EASY') {
         this.paddle = paddle;
+        this.baseDifficulty = difficulty;
         this.difficulty = CONFIG.AI_DIFFICULTY_LEVELS[difficulty];
         this.targetY = paddle.y + paddle.height / 2;
         this.reactionDelay = 0;
         this.lastUpdateTime = 0;
+        this.playerScore = 0; // Track player score to adjust difficulty
+        this.gameTime = 0; // Track game time for gradual difficulty increase
+    }
+    
+    updateDifficulty(playerScore, elapsedTime) {
+        // Gradually increase difficulty based on BOTH player score AND time
+        this.playerScore = playerScore;
+        this.gameTime = elapsedTime;
+        
+        const timeInSeconds = elapsedTime / 1000;
+        
+        // Very gradual difficulty progression
+        if (playerScore >= 7 || timeInSeconds >= 180) {
+            // After 7 points or 3 minutes
+            this.difficulty = CONFIG.AI_DIFFICULTY_LEVELS.EXPERT;
+        } else if (playerScore >= 5 || timeInSeconds >= 120) {
+            // After 5 points or 2 minutes
+            this.difficulty = CONFIG.AI_DIFFICULTY_LEVELS.HARD;
+        } else if (playerScore >= 3 || timeInSeconds >= 60) {
+            // After 3 points or 1 minute
+            this.difficulty = CONFIG.AI_DIFFICULTY_LEVELS.MEDIUM;
+        } else if (playerScore >= 1 || timeInSeconds >= 30) {
+            // After 1 point or 30 seconds
+            this.difficulty = CONFIG.AI_DIFFICULTY_LEVELS.EASY;
+        } else {
+            // Start very easy
+            this.difficulty = CONFIG.AI_DIFFICULTY_LEVELS.VERY_EASY;
+        }
     }
     
     update(ball, currentTime, extraBalls = []) {
+        // Don't move if paddle is stunned (frozen)
+        if (this.paddle.stunned) {
+            this.paddle.dy = 0;
+            return;
+        }
+        
         // Update reaction delay
         if (currentTime - this.lastUpdateTime > 100) {
             this.lastUpdateTime = currentTime;

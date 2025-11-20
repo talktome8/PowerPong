@@ -1,16 +1,16 @@
 // Game Configuration
 const CONFIG = {
     // Canvas
-    CANVAS_WIDTH: 800,
-    CANVAS_HEIGHT: 400,
+    CANVAS_WIDTH: 1200,
+    CANVAS_HEIGHT: 600,
     
     // Game Rules
     WINNING_SCORE: 10,
     
     // Paddle
-    PADDLE_WIDTH: 10,
-    PADDLE_HEIGHT: 80,
-    PADDLE_SPEED: 6,
+    PADDLE_WIDTH: 15,
+    PADDLE_HEIGHT: 100,
+    PADDLE_SPEED: 8,
     PADDLE_OFFSET: 10,
     
     // Ball
@@ -42,9 +42,11 @@ const CONFIG = {
     AI_REACTION_SPEED: 4,
     AI_ERROR_MARGIN: 15,
     AI_DIFFICULTY_LEVELS: {
-        EASY: { speed: 0.6, accuracy: 0.7 },
-        MEDIUM: { speed: 0.8, accuracy: 0.85 },
-        HARD: { speed: 1.0, accuracy: 0.95 }
+        VERY_EASY: { speed: 0.4, accuracy: 0.5 },
+        EASY: { speed: 0.55, accuracy: 0.65 },
+        MEDIUM: { speed: 0.75, accuracy: 0.8 },
+        HARD: { speed: 0.9, accuracy: 0.92 },
+        EXPERT: { speed: 1.0, accuracy: 0.98 }
     },
     
     // Key Codes (language-independent)
