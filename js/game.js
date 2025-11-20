@@ -100,6 +100,7 @@ class Game {
     setupTouchControls() {
         const touchUp = document.getElementById('touchUp');
         const touchDown = document.getElementById('touchDown');
+        const mobileStartBtn = document.getElementById('mobileStartBtn');
         
         if (touchUp && touchDown) {
             // Touch start
@@ -131,6 +132,33 @@ class Game {
             // Prevent context menu
             touchUp.addEventListener('contextmenu', (e) => e.preventDefault());
             touchDown.addEventListener('contextmenu', (e) => e.preventDefault());
+        }
+        
+        // Mobile start/pause button
+        if (mobileStartBtn) {
+            mobileStartBtn.addEventListener('click', () => {
+                this.togglePause();
+                this.updateMobileStartButton();
+            });
+            
+            mobileStartBtn.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                this.togglePause();
+                this.updateMobileStartButton();
+            });
+        }
+    }
+    
+    updateMobileStartButton() {
+        const mobileStartBtn = document.getElementById('mobileStartBtn');
+        if (mobileStartBtn) {
+            if (this.running) {
+                mobileStartBtn.textContent = 'PAUSE';
+                mobileStartBtn.style.background = 'linear-gradient(135deg, #f39c12 0%, #e74c3c 100%)';
+            } else {
+                mobileStartBtn.textContent = this.startTime === 0 ? 'START' : 'RESUME';
+                mobileStartBtn.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            }
         }
     }
     
@@ -173,6 +201,7 @@ class Game {
         }
         
         this.updateStatus();
+        this.updateMobileStartButton();
     }
     
     getCurrentTime() {

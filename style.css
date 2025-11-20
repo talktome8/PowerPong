@@ -64,6 +64,7 @@ body {
     padding: 20px;
     height: calc(100vh - 75px);
     max-width: 100%;
+    width: 100%;
 }
 
 .scoreboard {
@@ -78,6 +79,7 @@ body {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     min-width: 600px;
     max-width: 90%;
+    width: 100%;
 }
 
 .player {
@@ -118,6 +120,7 @@ body {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     display: block;
     max-width: 100%;
+    width: 100%;
     height: auto;
 }
 
@@ -129,6 +132,7 @@ body {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     min-height: 40px;
     animation: pulse 1s ease-in-out infinite;
+    text-align: center;
 }
 
 @keyframes pulse {
@@ -434,8 +438,140 @@ body {
     box-shadow: 0 0 25px #4ecdc4;
 }
 
+/* Mobile Start Button */
+.mobile-start-btn {
+    display: none;
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 20px 50px;
+    font-size: 1.5em;
+    font-weight: bold;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: 3px solid #fff;
+    border-radius: 50px;
+    color: #fff;
+    cursor: pointer;
+    z-index: 100;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: manipulation;
+}
+
+.mobile-start-btn:active {
+    transform: translateX(-50%) scale(0.95);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
 @media (max-width: 900px) {
     .mobile-controls {
         display: flex !important;
+    }
+    
+    .mobile-start-btn {
+        display: block !important;
+    }
+    
+    body {
+        overflow: hidden;
+    }
+    
+    .container {
+        padding: 10px;
+        height: calc(100vh - 60px);
+    }
+    
+    .menu-bar {
+        padding: 10px 15px;
+    }
+    
+    .menu-left h1 {
+        font-size: 1.2em;
+    }
+    
+    .scoreboard {
+        min-width: auto;
+        width: 95%;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+    
+    .score {
+        font-size: 2em;
+    }
+    
+    .game-status {
+        font-size: 1.2em;
+        margin-top: 10px;
+    }
+    
+    #gameCanvas {
+        width: 100% !important;
+        height: auto !important;
+        max-height: 60vh;
+    }
+    
+    .touch-button {
+        width: 70px;
+        height: 70px;
+        font-size: 1.8em;
+    }
+}
+
+@media (max-width: 900px) and (orientation: landscape) {
+    .container {
+        height: calc(100vh - 50px);
+    }
+    
+    .scoreboard {
+        flex-direction: row;
+        padding: 5px 10px;
+        margin-bottom: 5px;
+    }
+    
+    .player h2 {
+        font-size: 1em;
+        margin-bottom: 5px;
+    }
+    
+    .score {
+        font-size: 1.5em;
+    }
+    
+    .controls {
+        font-size: 0.7em;
+    }
+    
+    .vs {
+        font-size: 1.2em;
+        margin: 0 10px;
+    }
+    
+    #gameCanvas {
+        max-height: 75vh;
+    }
+    
+    .mobile-controls {
+        right: 10px;
+        gap: 15px;
+    }
+    
+    .touch-button {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5em;
+    }
+    
+    .mobile-start-btn {
+        bottom: 15px;
+        padding: 15px 40px;
+        font-size: 1.2em;
+    }
+    
+    .game-status {
+        font-size: 1em;
+        margin-top: 5px;
     }
 }
