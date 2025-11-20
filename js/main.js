@@ -5,34 +5,47 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Resize canvas to fit screen
     function resizeCanvas() {
-        const container = document.querySelector('.container');
+        const menuBar = document.querySelector('.menu-bar');
         const scoreboard = document.querySelector('.scoreboard');
         const gameStatus = document.getElementById('gameStatus');
         const mobileStartBtn = document.getElementById('mobileStartBtn');
+        const mobileControls = document.querySelector('.mobile-controls');
         
-        // Calculate available space
-        const menuBarHeight = document.querySelector('.menu-bar').offsetHeight;
-        const scoreboardHeight = scoreboard.offsetHeight;
-        const statusHeight = gameStatus.offsetHeight;
-        const mobileStartHeight = mobileStartBtn ? mobileStartBtn.offsetHeight + 40 : 0;
-        
-        const availableHeight = window.innerHeight - menuBarHeight - scoreboardHeight - statusHeight - mobileStartHeight - 60;
-        const availableWidth = window.innerWidth - 40;
-        
-        // Maintain 2:1 aspect ratio (or adjust based on screen)
-        const aspectRatio = 2;
-        let canvasWidth = availableWidth;
-        let canvasHeight = canvasWidth / aspectRatio;
-        
-        // If height is too tall, limit by height instead
-        if (canvasHeight > availableHeight) {
-            canvasHeight = availableHeight;
-            canvasWidth = canvasHeight * aspectRatio;
-        }
-        
-        // Set canvas display size (CSS)
-        canvas.style.width = canvasWidth + 'px';
-        canvas.style.height = canvasHeight + 'px';
+        // Wait a bit for elements to render
+        setTimeout(() => {
+            // Calculate available space more accurately
+            const menuBarHeight = menuBar ? menuBar.offsetHeight : 0;
+            const scoreboardHeight = scoreboard ? scoreboard.offsetHeight : 0;
+            const statusHeight = gameStatus ? gameStatus.offsetHeight : 0;
+            
+            // Check if mobile controls are visible
+            const mobileControlsVisible = mobileControls && window.getComputedStyle(mobileControls).display !== 'none';
+            const mobileControlsHeight = mobileControlsVisible ? mobileControls.offsetHeight : 0;
+            const mobileStartHeight = mobileStartBtn && window.getComputedStyle(mobileStartBtn).display !== 'none' ? mobileStartBtn.offsetHeight : 0;
+            
+            // More aggressive space calculation - minimal padding
+            const availableHeight = window.innerHeight - menuBarHeight - scoreboardHeight - statusHeight - mobileControlsHeight - mobileStartHeight - 30;
+            const availableWidth = window.innerWidth - 20;
+            
+            // Maintain 2:1 aspect ratio
+            const aspectRatio = 2;
+            let canvasWidth = availableWidth;
+            let canvasHeight = canvasWidth / aspectRatio;
+            
+            // If height is too tall, limit by height instead
+            if (canvasHeight > availableHeight) {
+                canvasHeight = availableHeight;
+                canvasWidth = canvasHeight * aspectRatio;
+            }
+            
+            // Ensure minimum size
+            if (canvasWidth < 300) canvasWidth = 300;
+            if (canvasHeight < 150) canvasHeight = 150;
+            
+            // Set canvas display size (CSS)
+            canvas.style.width = canvasWidth + 'px';
+            canvas.style.height = canvasHeight + 'px';
+        }, 50);
     }
     
     // Initial resize
