@@ -221,6 +221,16 @@ class Game {
         this.gameMode = mode;
         this.useDragControl = useDrag;
         
+        // Toggle touch button visibility based on drag mode
+        const touchButtons = document.querySelector('.mobile-controls');
+        if (touchButtons) {
+            if (useDrag) {
+                touchButtons.style.display = 'none';
+            } else {
+                touchButtons.style.display = 'flex';
+            }
+        }
+        
         if (mode === GAME_MODES.SINGLE_PLAYER) {
             // In single player, swap paddles: player on right, AI on left
             this.aiPlayer = new AIPlayer(this.player1, 'VERY_EASY'); // AI controls left paddle, starts very easy

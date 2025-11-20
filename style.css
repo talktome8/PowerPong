@@ -119,9 +119,7 @@ body {
     background: #1a1a2e;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     display: block;
-    max-width: 100%;
-    width: 100%;
-    height: auto;
+    margin: 0 auto;
 }
 
 .game-status {
@@ -479,45 +477,64 @@ body {
     }
     
     .container {
-        padding: 10px;
-        height: calc(100vh - 60px);
+        padding: 5px;
+        height: auto;
+        min-height: 100vh;
     }
     
     .menu-bar {
-        padding: 10px 15px;
+        padding: 8px 12px;
     }
     
     .menu-left h1 {
-        font-size: 1.2em;
+        font-size: 1em;
     }
     
     .scoreboard {
         min-width: auto;
-        width: 95%;
-        padding: 10px;
-        margin-bottom: 10px;
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 8px;
+        flex-wrap: wrap;
+    }
+    
+    .player {
+        flex: 1;
+        min-width: 100px;
+    }
+    
+    .player h2 {
+        font-size: 1em;
     }
     
     .score {
-        font-size: 2em;
+        font-size: 1.8em;
+    }
+    
+    .controls {
+        font-size: 0.75em;
+    }
+    
+    .vs {
+        font-size: 1.5em;
+        margin: 0 10px;
     }
     
     .game-status {
-        font-size: 1.2em;
-        margin-top: 10px;
-    }
-    
-    #gameCanvas {
-        width: 100% !important;
-        height: auto !important;
-        max-height: 60vh;
-        object-fit: contain;
+        font-size: 1em;
+        margin-top: 8px;
     }
     
     .touch-button {
         width: 70px;
         height: 70px;
         font-size: 1.8em;
+    }
+    
+    .help-btn, .reset-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 1.2em;
     }
 }
 

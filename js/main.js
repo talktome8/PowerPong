@@ -3,6 +3,47 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('gameCanvas');
     const game = new Game(canvas);
     
+    // Resize canvas to fit screen
+    function resizeCanvas() {
+        const container = document.querySelector('.container');
+        const scoreboard = document.querySelector('.scoreboard');
+        const gameStatus = document.getElementById('gameStatus');
+        const mobileStartBtn = document.getElementById('mobileStartBtn');
+        
+        // Calculate available space
+        const menuBarHeight = document.querySelector('.menu-bar').offsetHeight;
+        const scoreboardHeight = scoreboard.offsetHeight;
+        const statusHeight = gameStatus.offsetHeight;
+        const mobileStartHeight = mobileStartBtn ? mobileStartBtn.offsetHeight + 40 : 0;
+        
+        const availableHeight = window.innerHeight - menuBarHeight - scoreboardHeight - statusHeight - mobileStartHeight - 60;
+        const availableWidth = window.innerWidth - 40;
+        
+        // Maintain 2:1 aspect ratio (or adjust based on screen)
+        const aspectRatio = 2;
+        let canvasWidth = availableWidth;
+        let canvasHeight = canvasWidth / aspectRatio;
+        
+        // If height is too tall, limit by height instead
+        if (canvasHeight > availableHeight) {
+            canvasHeight = availableHeight;
+            canvasWidth = canvasHeight * aspectRatio;
+        }
+        
+        // Set canvas display size (CSS)
+        canvas.style.width = canvasWidth + 'px';
+        canvas.style.height = canvasHeight + 'px';
+    }
+    
+    // Initial resize
+    resizeCanvas();
+    
+    // Resize on window resize or orientation change
+    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('orientationchange', () => {
+        setTimeout(resizeCanvas, 100);
+    });
+    
     // Make sure the page has focus for keyboard input
     window.focus();
     document.body.focus();
