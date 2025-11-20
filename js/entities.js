@@ -19,11 +19,9 @@ class Paddle {
         this.controlScheme = null; // For single player mode
     }
     
-    update(keys, currentTime, touchControls = null, dragY = null, canvasHeight = CONFIG.CANVAS_HEIGHT) {
-        // Handle stun
-        if (this.stunned && currentTime - this.stunnedTime > CONFIG.FREEZE_DURATION) {
-            this.stunned = false;
-        }
+    update(keys, currentTime, touchControls = null, dragY = null, canvasHeight = CONFIG.CANVAS_HEIGHT, difficultyMultiplier = 1.0) {
+        // Freeze is now removed when a point is scored, not time-based
+        // (removed time-based stun check)
         
         // Handle power-up expiration
         if (this.powerUp && currentTime - this.powerUpTime > CONFIG.POWERUP_DURATION) {
@@ -36,8 +34,10 @@ class Paddle {
             this.combo = 0;
         }
         
-        // Calculate speed - increased base speed for better responsiveness
-        const speed = (this.powerUp === 'speed' ? CONFIG.PADDLE_SPEED * 2.0 : CONFIG.PADDLE_SPEED * 1.2);
+        // Calculate speed - scale with difficulty to match faster ball speeds
+        // Base speed increases with difficulty multiplier (starts at 1.0, increases over time)
+        const baseSpeed = CONFIG.PADDLE_SPEED * (1.0 + (difficultyMultiplier - 1.0) * 0.8); // 80% of difficulty increase
+        const speed = (this.powerUp === 'speed' ? baseSpeed * 2.0 : baseSpeed * 1.2);
         
         // Reset dy first
         this.dy = 0;
@@ -366,5 +366,70 @@ class Obstacle {
     
     checkCollision(ball) {
         return Utils.circleRectCollision(ball, this);
+    }
+}
+
+// Helper Paddle - AI-controlled support bot
+class HelperPaddle extends Paddle {
+    constructor(x, y, color, targetBall) {
+        super(x, y, color, false);
+        this.targetBall = targetBall;
+        this.height = CONFIG.PADDLE_HEIGHT * 0.7; // Smaller than main paddle
+        this.baseHeight = this.height;
+        this.width = CONFIG.PADDLE_WIDTH * 0.8;
+        this.alpha = 0.8; // Semi-transparent
+        this.aiSpeed = CONFIG.PADDLE_SPEED * 1.5; // Fast tracking
+    }
+    
+    update(balls, currentTime) {
+        // Find closest ball to block
+        let closestBall = this.targetBall;
+        let minDist = Infinity;
+        
+        [this.targetBall, ...balls].forEach(ball => {
+            if (ball) {
+                const dist = Math.abs(ball.x - this.x);
+                if (dist < minDist) {
+                    minDist = dist;
+                    closestBall = ball;
+                }
+            }
+        });
+        
+        if (closestBall) {
+            // Track ball vertical position
+            const targetY = closestBall.y - this.height / 2;
+            const diff = targetY - this.y;
+            
+            if (Math.abs(diff) > 5) {
+                this.dy = Math.sign(diff) * this.aiSpeed;
+            } else {
+                this.dy = 0;
+                this.y = targetY;
+            }
+        }
+        
+        // Update position
+        this.y += this.dy;
+        this.y = Utils.clamp(this.y, 0, CONFIG.CANVAS_HEIGHT - this.height);
+    }
+    
+    draw(ctx) {
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        
+        // Draw with robot indicator
+        ctx.fillStyle = this.color;
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = this.color;
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+        ctx.shadowBlur = 0;
+        
+        // Draw robot emoji
+        ctx.globalAlpha = 1.0;
+        ctx.font = '20px Arial';
+        ctx.fillText('🤖', this.x - 25, this.y + this.height / 2);
+        
+        ctx.restore();
     }
 }

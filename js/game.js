@@ -42,6 +42,7 @@ class Game {
         this.extraBalls = [];
         this.powerUps = [];
         this.obstacles = [];
+        this.helperPaddles = []; // Support bots
         
         // Systems
         this.particleSystem = new ParticleSystem();
@@ -154,6 +155,11 @@ class Game {
     setupDragControls() {
         // Touch drag on canvas
         this.canvas.addEventListener('touchstart', (e) => {
+            // Auto-start game on first touch if not running
+            if (!this.running && !this.gameOver) {
+                this.togglePause();
+            }
+            
             if (!this.useDragControl) return;
             const touch = e.touches[0];
             const rect = this.canvas.getBoundingClientRect();
@@ -175,6 +181,11 @@ class Game {
         
         // Mouse drag on canvas (for desktop)
         this.canvas.addEventListener('mousedown', (e) => {
+            // Auto-start game on first click if not running
+            if (!this.running && !this.gameOver) {
+                this.togglePause();
+            }
+            
             if (!this.useDragControl) return;
             const rect = this.canvas.getBoundingClientRect();
             this.dragY = e.clientY - rect.top;
@@ -296,20 +307,24 @@ class Game {
             this.aiPlayer.updateDifficulty(this.player2.score, this.elapsedTime);
             this.aiPlayer.update(this.ball, currentTime, this.extraBalls);
             // Update human player (player2) with touch controls or drag
+            // Pass difficulty multiplier so paddle speed scales with ball speed
             const canvasRect = this.canvas.getBoundingClientRect();
             const dragY = this.useDragControl ? this.dragY : null;
-            this.player2.update(this.keys, currentTime, this.touchControls, dragY, canvasRect.height);
+            this.player2.update(this.keys, currentTime, this.touchControls, dragY, canvasRect.height, this.difficultyLevel);
         } else {
             // Two player or tournament: both paddles controlled by keys
-            this.player1.update(this.keys, currentTime);
+            this.player1.update(this.keys, currentTime, null, null, CONFIG.CANVAS_HEIGHT, this.difficultyLevel);
             const canvasRect = this.canvas.getBoundingClientRect();
-            this.player2.update(this.keys, currentTime, this.touchControls, null, canvasRect.height);
+            this.player2.update(this.keys, currentTime, this.touchControls, null, canvasRect.height, this.difficultyLevel);
         }
         
         this.ball.update(currentTime);
         
         // Update extra balls
         this.extraBalls.forEach(eb => eb.update(currentTime));
+        
+        // Update helper paddles
+        this.helperPaddles.forEach(hp => hp.update(this.extraBalls, currentTime));
         
         // Check paddle collisions
         if (this.ball.handlePaddleCollision(this.player1, currentTime, this.particleSystem)) {
@@ -318,6 +333,14 @@ class Game {
         if (this.ball.handlePaddleCollision(this.player2, currentTime, this.particleSystem)) {
             // Ball hit player 2's paddle
         }
+        
+        // Helper paddle collisions
+        this.helperPaddles.forEach(hp => {
+            this.ball.handlePaddleCollision(hp, currentTime, this.particleSystem);
+            this.extraBalls.forEach(eb => {
+                eb.handlePaddleCollision(hp, currentTime, this.particleSystem);
+            });
+        });
         
         // Extra balls paddle collisions
         this.extraBalls.forEach(eb => {
@@ -369,32 +392,42 @@ class Game {
         // Main ball
         if (this.ball.x - this.ball.radius <= 0) {
             // Ball went past left paddle - right player (player2) scores
-            const comboBonus = Math.floor(this.player2.combo / 3); // Bonus point for every 3 combo hits
-            this.player2.score += (1 + comboBonus);
+            // Always 1 point, no combo bonus or multi-ball multipliers
+            this.player2.score += 1;
             this.player1.combo = 0; // Reset losing player's combo
+            // Clear freeze effects when point is scored
+            this.player1.stunned = false;
+            this.player2.stunned = false;
             this.updateScore();
             this.checkGameOver();
             this.ball.reset();
         } else if (this.ball.x + this.ball.radius >= CONFIG.CANVAS_WIDTH) {
             // Ball went past right paddle - left player (player1) scores
-            const comboBonus = Math.floor(this.player1.combo / 3); // Bonus point for every 3 combo hits
-            this.player1.score += (1 + comboBonus);
+            // Always 1 point, no combo bonus or multi-ball multipliers
+            this.player1.score += 1;
             this.player2.combo = 0; // Reset losing player's combo
+            // Clear freeze effects when point is scored
+            this.player1.stunned = false;
+            this.player2.stunned = false;
             this.updateScore();
             this.checkGameOver();
             this.ball.reset();
         }
         
-        // Extra balls
+        // Extra balls - each worth only 1 point
         this.extraBalls = this.extraBalls.filter(eb => {
             if (eb.x - eb.radius <= 0) {
-                const comboBonus = Math.floor(this.player2.combo / 3);
-                this.player2.score += (1 + comboBonus);
+                this.player2.score += 1; // Always 1 point
+                // Clear freeze effects when point is scored
+                this.player1.stunned = false;
+                this.player2.stunned = false;
                 this.updateScore();
                 return false;
             } else if (eb.x + eb.radius >= CONFIG.CANVAS_WIDTH) {
-                const comboBonus = Math.floor(this.player1.combo / 3);
-                this.player1.score += (1 + comboBonus);
+                this.player1.score += 1; // Always 1 point
+                // Clear freeze effects when point is scored
+                this.player1.stunned = false;
+                this.player2.stunned = false;
                 this.updateScore();
                 return false;
             }
@@ -545,7 +578,29 @@ class Game {
                 this.ball.slowMo = true;
                 setTimeout(() => this.ball.slowMo = false, CONFIG.POWERUP_DURATION);
                 break;
+            case 'helper':
+                this.spawnHelperPaddle(collectingPlayer, currentTime);
+                break;
         }
+    }
+    
+    spawnHelperPaddle(player, currentTime) {
+        // Spawn helper next to the player's paddle
+        const isLeftSide = player.x < CONFIG.CANVAS_WIDTH / 2;
+        const helperX = isLeftSide ? player.x + 40 : player.x - 40;
+        const helperY = CONFIG.CANVAS_HEIGHT / 2 - CONFIG.PADDLE_HEIGHT / 2;
+        
+        const helper = new HelperPaddle(helperX, helperY, player.color, this.ball);
+        helper.spawnTime = currentTime;
+        this.helperPaddles.push(helper);
+        
+        // Remove helper after duration
+        setTimeout(() => {
+            const index = this.helperPaddles.indexOf(helper);
+            if (index > -1) {
+                this.helperPaddles.splice(index, 1);
+            }
+        }, CONFIG.POWERUP_DURATION);
     }
     
     createExtraBalls() {
@@ -616,6 +671,7 @@ class Game {
         this.particleSystem.draw(this.ctx);
         this.player1.draw(this.ctx);
         this.player2.draw(this.ctx);
+        this.helperPaddles.forEach(hp => hp.draw(this.ctx)); // Draw helper bots
         this.ball.draw(this.ctx);
         this.extraBalls.forEach(eb => eb.draw(this.ctx));
     }
@@ -746,6 +802,7 @@ class Game {
         this.extraBalls = [];
         this.powerUps = [];
         this.obstacles = [];
+        this.helperPaddles = []; // Clear support bots
         this.obstaclesActive = false;
         this.particleSystem.clear();
         this.lastPowerUpTime = Date.now();

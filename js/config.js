@@ -85,7 +85,8 @@ const CONFIG = {
         { type: 'invisible', color: '#888888', emoji: '👻', description: 'Invisible Ball!' },
         { type: 'multiball', color: '#ff6600', emoji: '🎯', description: 'Multi-Ball!' },
         { type: 'curve', color: '#ffff00', emoji: '🌀', description: 'Curve Ball!' },
-        { type: 'slow', color: '#9b59b6', emoji: '🐌', description: 'Slow Motion!' }
+        { type: 'slow', color: '#9b59b6', emoji: '🐌', description: 'Slow Motion!' },
+        { type: 'helper', color: '#00ff88', emoji: '🤖', description: 'Support Bot!' }
     ]
 };
 
