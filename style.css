@@ -61,7 +61,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 10px 5px;
+    padding: 5px;
     height: calc(100vh - 75px);
     max-width: 100%;
     width: 100%;
@@ -71,8 +71,8 @@ body {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    margin-bottom: 10px;
-    padding: 15px;
+    margin-bottom: 5px;
+    padding: 10px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 15px;
     backdrop-filter: blur(10px);
@@ -123,12 +123,13 @@ body {
 }
 
 .game-status {
-    margin-top: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
     font-size: 2em;
     font-weight: bold;
     color: #ffd700;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    min-height: 35px;
+    min-height: 30px;
     animation: pulse 1s ease-in-out infinite;
     text-align: center;
 }
@@ -440,11 +441,11 @@ body {
 .mobile-start-btn {
     display: none;
     position: fixed;
-    bottom: 15px;
+    bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
-    padding: 15px 40px;
-    font-size: 1.3em;
+    padding: 12px 35px;
+    font-size: 1.2em;
     font-weight: bold;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     border: 3px solid #fff;
@@ -477,24 +478,24 @@ body {
     }
     
     .container {
-        padding: 3px;
+        padding: 2px;
         height: auto;
         min-height: 100vh;
     }
     
     .menu-bar {
-        padding: 6px 10px;
+        padding: 4px 8px;
     }
     
     .menu-left h1 {
-        font-size: 0.9em;
+        font-size: 0.85em;
     }
     
     .scoreboard {
         min-width: auto;
         width: 100%;
-        padding: 6px;
-        margin-bottom: 5px;
+        padding: 4px 8px;
+        margin-bottom: 3px;
         flex-wrap: wrap;
     }
     
@@ -504,40 +505,41 @@ body {
     }
     
     .player h2 {
-        font-size: 0.85em;
-        margin-bottom: 3px;
+        font-size: 0.8em;
+        margin-bottom: 2px;
     }
     
     .score {
-        font-size: 1.5em;
+        font-size: 1.4em;
     }
     
     .controls {
-        font-size: 0.7em;
-        margin-top: 3px;
+        font-size: 0.65em;
+        margin-top: 2px;
     }
     
     .vs {
-        font-size: 1.2em;
-        margin: 0 8px;
+        font-size: 1.1em;
+        margin: 0 6px;
     }
     
     .game-status {
-        font-size: 0.9em;
-        margin-top: 5px;
-        min-height: 25px;
+        font-size: 0.85em;
+        margin-top: 3px;
+        margin-bottom: 3px;
+        min-height: 22px;
     }
     
     .touch-button {
-        width: 60px;
-        height: 60px;
-        font-size: 1.5em;
+        width: 55px;
+        height: 55px;
+        font-size: 1.4em;
     }
     
     .help-btn, .reset-btn {
-        width: 30px;
-        height: 30px;
-        font-size: 1em;
+        width: 28px;
+        height: 28px;
+        font-size: 0.95em;
     }
 }
 
