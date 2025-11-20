@@ -29,26 +29,49 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Control scheme selection
     const controlSchemeSelection = document.getElementById('controlSchemeSelection');
+    const mobileControlSelection = document.getElementById('mobileControlSelection');
     const arrowKeysBtn = document.getElementById('arrowKeysBtn');
     const wasdKeysBtn = document.getElementById('wasdKeysBtn');
+    const touchDragBtn = document.getElementById('touchDragBtn');
+    const touchButtonsBtn = document.getElementById('touchButtonsBtn');
     
     singlePlayerBtn.onclick = () => {
         // Check if mobile device
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 900;
         
         if (isMobile) {
-            // On mobile, skip control selection and use touch controls
-            game.setGameMode(GAME_MODES.SINGLE_PLAYER, CONFIG.CONTROL_SCHEMES.ARROWS);
-            modeModal.style.display = 'none';
-            resetModeModal();
-            updatePlayerNames('Computer 🤖', 'Player');
-            updateControlDisplay('W/S Keys', 'Touch Controls');
+            // On mobile, show mobile control selection
+            document.querySelector('.mode-selection').style.display = 'none';
+            document.querySelector('.mode-description').style.display = 'none';
+            mobileControlSelection.style.display = 'block';
         } else {
             // On desktop, show control scheme selection
             document.querySelector('.mode-selection').style.display = 'none';
             document.querySelector('.mode-description').style.display = 'none';
             controlSchemeSelection.style.display = 'block';
         }
+    };
+    
+    // Mobile touch drag control
+    touchDragBtn.onclick = () => {
+        game.setGameMode(GAME_MODES.SINGLE_PLAYER, CONFIG.CONTROL_SCHEMES.ARROWS, true);
+        modeModal.style.display = 'none';
+        resetModeModal();
+        updatePlayerNames('Computer 🤖', 'Player');
+        updateControlDisplay('W/S Keys', 'Touch & Drag');
+        // Hide button controls, enable drag
+        document.getElementById('mobileControls').style.display = 'none';
+    };
+    
+    // Mobile button controls
+    touchButtonsBtn.onclick = () => {
+        game.setGameMode(GAME_MODES.SINGLE_PLAYER, CONFIG.CONTROL_SCHEMES.ARROWS, false);
+        modeModal.style.display = 'none';
+        resetModeModal();
+        updatePlayerNames('Computer 🤖', 'Player');
+        updateControlDisplay('W/S Keys', 'Touch Buttons');
+        // Show button controls
+        document.getElementById('mobileControls').style.display = 'flex';
     };
     
     arrowKeysBtn.onclick = () => {
@@ -88,6 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('.mode-selection').style.display = 'grid';
         document.querySelector('.mode-description').style.display = 'block';
         controlSchemeSelection.style.display = 'none';
+        mobileControlSelection.style.display = 'none';
     }
     
     function updatePlayerNames(p1Name, p2Name) {

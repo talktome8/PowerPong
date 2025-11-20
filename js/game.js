@@ -5,6 +5,8 @@ class Game {
         this.ctx = canvas.getContext('2d');
         this.keys = {};
         this.touchControls = { up: false, down: false };
+        this.useDragControl = false;
+        this.dragY = null;
         
         // Game mode
         this.gameMode = GAME_MODES.TWO_PLAYER;
@@ -149,6 +151,59 @@ class Game {
         }
     }
     
+    setupDragControls() {
+        // Touch drag on canvas
+        this.canvas.addEventListener('touchstart', (e) => {
+            if (!this.useDragControl) return;
+            const touch = e.touches[0];
+            const rect = this.canvas.getBoundingClientRect();
+            this.dragY = touch.clientY - rect.top;
+        });
+        
+        this.canvas.addEventListener('touchmove', (e) => {
+            if (!this.useDragControl) return;
+            e.preventDefault();
+            const touch = e.touches[0];
+            const rect = this.canvas.getBoundingClientRect();
+            this.dragY = touch.clientY - rect.top;
+        });
+        
+        this.canvas.addEventListener('touchend', () => {
+            if (!this.useDragControl) return;
+            this.dragY = null;
+        });
+        
+        // Mouse drag on canvas (for desktop)
+        this.canvas.addEventListener('mousedown', (e) => {
+            if (!this.useDragControl) return;
+            const rect = this.canvas.getBoundingClientRect();
+            this.dragY = e.clientY - rect.top;
+            this.canvas.style.cursor = 'grabbing';
+        });
+        
+        this.canvas.addEventListener('mousemove', (e) => {
+            if (!this.useDragControl || this.dragY === null) return;
+            const rect = this.canvas.getBoundingClientRect();
+            this.dragY = e.clientY - rect.top;
+        });
+        
+        this.canvas.addEventListener('mouseup', () => {
+            if (!this.useDragControl) return;
+            this.dragY = null;
+            this.canvas.style.cursor = 'grab';
+        });
+        
+        this.canvas.addEventListener('mouseleave', () => {
+            if (!this.useDragControl) return;
+            this.dragY = null;
+            this.canvas.style.cursor = 'grab';
+        });
+        
+        if (this.useDragControl) {
+            this.canvas.style.cursor = 'grab';
+        }
+    }
+    
     updateMobileStartButton() {
         const mobileStartBtn = document.getElementById('mobileStartBtn');
         if (mobileStartBtn) {
@@ -162,14 +217,20 @@ class Game {
         }
     }
     
-    setGameMode(mode, controlScheme) {
+    setGameMode(mode, controlScheme, useDrag = false) {
         this.gameMode = mode;
+        this.useDragControl = useDrag;
         
         if (mode === GAME_MODES.SINGLE_PLAYER) {
             // In single player, swap paddles: player on right, AI on left
             this.aiPlayer = new AIPlayer(this.player1, 'VERY_EASY'); // AI controls left paddle, starts very easy
             this.player2.controlScheme = controlScheme || CONFIG.CONTROL_SCHEMES.ARROWS; // Player controls right paddle
             this.player1.controlScheme = null; // AI doesn't need control scheme
+            
+            // Setup drag controls if enabled
+            if (useDrag) {
+                this.setupDragControls();
+            }
         } else if (mode === GAME_MODES.THREE_PLAYER) {
             this.tournament = new TournamentManager();
             this.player1.controlScheme = null; // Reset to default two-player controls
@@ -224,12 +285,15 @@ class Game {
             // Don't update player1 with keys - AI does it
             this.aiPlayer.updateDifficulty(this.player2.score, this.elapsedTime);
             this.aiPlayer.update(this.ball, currentTime, this.extraBalls);
-            // Update human player (player2) with touch controls
-            this.player2.update(this.keys, currentTime, this.touchControls);
+            // Update human player (player2) with touch controls or drag
+            const canvasRect = this.canvas.getBoundingClientRect();
+            const dragY = this.useDragControl ? this.dragY : null;
+            this.player2.update(this.keys, currentTime, this.touchControls, dragY, canvasRect.height);
         } else {
             // Two player or tournament: both paddles controlled by keys
             this.player1.update(this.keys, currentTime);
-            this.player2.update(this.keys, currentTime, this.touchControls);
+            const canvasRect = this.canvas.getBoundingClientRect();
+            this.player2.update(this.keys, currentTime, this.touchControls, null, canvasRect.height);
         }
         
         this.ball.update(currentTime);

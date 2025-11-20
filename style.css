@@ -511,6 +511,7 @@ body {
         width: 100% !important;
         height: auto !important;
         max-height: 60vh;
+        object-fit: contain;
     }
     
     .touch-button {

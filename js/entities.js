@@ -19,7 +19,7 @@ class Paddle {
         this.controlScheme = null; // For single player mode
     }
     
-    update(keys, currentTime, touchControls = null) {
+    update(keys, currentTime, touchControls = null, dragY = null, canvasHeight = CONFIG.CANVAS_HEIGHT) {
         // Handle stun
         if (this.stunned && currentTime - this.stunnedTime > CONFIG.FREEZE_DURATION) {
             this.stunned = false;
@@ -43,8 +43,22 @@ class Paddle {
         this.dy = 0;
         
         if (!this.stunned) {
+            // Handle drag control (touch/mouse drag)
+            if (dragY !== null && dragY !== undefined) {
+                // Scale dragY from canvas coordinates to game coordinates
+                const scaleFactor = CONFIG.CANVAS_HEIGHT / canvasHeight;
+                const targetY = dragY * scaleFactor - this.height / 2;
+                const diff = targetY - this.y;
+                
+                // Smooth movement towards drag position
+                if (Math.abs(diff) > 5) {
+                    this.dy = Math.sign(diff) * speed;
+                } else {
+                    this.y = targetY;
+                }
+            }
             // Check if this paddle has a specific control scheme (single player mode)
-            if (this.controlScheme === CONFIG.CONTROL_SCHEMES.ARROWS) {
+            else if (this.controlScheme === CONFIG.CONTROL_SCHEMES.ARROWS) {
                 // Human player with arrow keys or touch controls
                 if (keys[CONFIG.KEYS.ARROW_UP] || (touchControls && touchControls.up)) {
                     this.dy = -speed;
