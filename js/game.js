@@ -8,6 +8,9 @@ class Game {
         this.useDragControl = false;
         this.dragY = null;
         
+        // Gamepad support
+        this.gamepadManager = new GamepadManager();
+        
         // Game mode
         this.gameMode = GAME_MODES.TWO_PLAYER;
         this.aiPlayer = null;
@@ -297,6 +300,9 @@ class Game {
         const currentTime = Date.now();
         this.elapsedTime = this.getCurrentTime();
         
+        // Update gamepad state
+        this.gamepadManager.update();
+        
         // Update difficulty
         this.updateDifficulty(currentTime);
         
@@ -306,16 +312,32 @@ class Game {
             // Don't update player1 with keys - AI does it
             this.aiPlayer.updateDifficulty(this.player2.score, this.elapsedTime);
             this.aiPlayer.update(this.ball, currentTime, this.extraBalls);
-            // Update human player (player2) with touch controls or drag
-            // Pass difficulty multiplier so paddle speed scales with ball speed
+            // Update human player (player2) with keyboard, touch, drag, OR gamepad
             const canvasRect = this.canvas.getBoundingClientRect();
             const dragY = this.useDragControl ? this.dragY : null;
-            this.player2.update(this.keys, currentTime, this.touchControls, dragY, canvasRect.height, this.difficultyLevel);
+            const gamepadInput = this.gamepadManager.getPlayerInput('player2');
+            const mergedControls = {
+                up: this.touchControls.up || gamepadInput.up,
+                down: this.touchControls.down || gamepadInput.down
+            };
+            this.player2.update(this.keys, currentTime, mergedControls, dragY, canvasRect.height, this.difficultyLevel);
         } else {
-            // Two player or tournament: both paddles controlled by keys
-            this.player1.update(this.keys, currentTime, null, null, CONFIG.CANVAS_HEIGHT, this.difficultyLevel);
+            // Two player or tournament: both paddles controlled by keys or gamepads
+            const gamepad1Input = this.gamepadManager.getPlayerInput('player1');
+            const gamepad2Input = this.gamepadManager.getPlayerInput('player2');
+            
+            const player1Controls = {
+                up: gamepad1Input.up,
+                down: gamepad1Input.down
+            };
+            const player2Controls = {
+                up: this.touchControls.up || gamepad2Input.up,
+                down: this.touchControls.down || gamepad2Input.down
+            };
+            
+            this.player1.update(this.keys, currentTime, player1Controls, null, CONFIG.CANVAS_HEIGHT, this.difficultyLevel);
             const canvasRect = this.canvas.getBoundingClientRect();
-            this.player2.update(this.keys, currentTime, this.touchControls, null, canvasRect.height, this.difficultyLevel);
+            this.player2.update(this.keys, currentTime, player2Controls, null, canvasRect.height, this.difficultyLevel);
         }
         
         this.ball.update(currentTime);

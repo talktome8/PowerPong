@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updatePlayerNames('Computer 🤖', 'Player');
         updateControlDisplay('W/S Keys', 'Touch & Drag');
         // Hide button controls, enable drag
-        document.getElementById('mobileControls').style.display = 'none';
+        document.getElementById('mobileControls').classList.remove('show');
     };
     
     // Mobile button controls
@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updatePlayerNames('Computer 🤖', 'Player');
         updateControlDisplay('W/S Keys', 'Touch Buttons');
         // Show button controls
-        document.getElementById('mobileControls').style.display = 'flex';
+        document.getElementById('mobileControls').classList.add('show');
     };
     
     arrowKeysBtn.onclick = () => {
@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updatePlayerNames('Computer 🤖', 'Player');
         updateControlDisplay('W/S Keys', 'Arrow Keys');
         // Hide mobile controls for keyboard
-        document.getElementById('mobileControls').style.display = 'none';
+        document.getElementById('mobileControls').classList.remove('show');
     };
     
     wasdKeysBtn.onclick = () => {
@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updatePlayerNames('Computer 🤖', 'Player');
         updateControlDisplay('W/S Keys', 'W/S Keys');
         // Hide mobile controls for keyboard
-        document.getElementById('mobileControls').style.display = 'none';
+        document.getElementById('mobileControls').classList.remove('show');
     };
     
     twoPlayerBtn.onclick = () => {
@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updatePlayerNames('Player 1', 'Player 2');
         updateControlDisplay('W/S Keys', '↑/↓ Keys');
         // Hide mobile controls for two player keyboard mode
-        document.getElementById('mobileControls').style.display = 'none';
+        document.getElementById('mobileControls').classList.remove('show');
     };
     
     threePlayerBtn.onclick = () => {
@@ -177,6 +177,8 @@ document.addEventListener('DOMContentLoaded', () => {
         resetModeModal();
         updatePlayerNames('Player 1', 'Player 2');
         updateControlDisplay('W/S Keys', '↑/↓ Keys');
+        // Hide mobile controls for tournament mode
+        document.getElementById('mobileControls').classList.remove('show');
     };
     
     function resetModeModal() {

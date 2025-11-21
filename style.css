@@ -418,7 +418,7 @@ html, body {
 
 /* Mobile Touch Controls */
 .mobile-controls {
-    display: none;
+    display: none; /* Hidden by default */
     position: fixed;
     right: 5px;
     top: 50%;
@@ -426,6 +426,10 @@ html, body {
     flex-direction: column;
     gap: 12px;
     z-index: 100;
+}
+
+.mobile-controls.show {
+    display: flex !important; /* Only show when needed */
 }
 
 .touch-button {
@@ -487,10 +491,7 @@ html, body {
 }
 
 @media (max-width: 900px) {
-    .mobile-controls {
-        display: flex !important;
-    }
-    
+    /* Don't force display - let JavaScript control it */
     .mobile-start-btn {
         display: block !important;
     }
