@@ -4,11 +4,17 @@
     box-sizing: border-box;
 }
 
-body {
+html, body {
     font-family: 'Arial', sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
+    height: 100vh;
     overflow: hidden;
+    position: fixed;
+    width: 100%;
+    touch-action: none; /* Prevent touch scrolling */
+    -webkit-overflow-scrolling: none;
+    overscroll-behavior: none;
 }
 
 /* Menu Bar */
@@ -62,9 +68,14 @@ body {
     align-items: center;
     justify-content: center;
     padding: 5px;
-    height: calc(100vh - 75px);
+    height: 100vh;
     max-width: 100%;
     width: 100%;
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    touch-action: none;
 }
 
 .scoreboard {
@@ -120,6 +131,9 @@ body {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     display: block;
     margin: 0 auto;
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .game-status {
@@ -473,14 +487,18 @@ body {
         display: block !important;
     }
     
-    body {
+    html, body {
         overflow: hidden;
+        position: fixed;
+        width: 100%;
+        height: 100vh;
     }
     
     .container {
         padding: 2px;
-        height: auto;
-        min-height: 100vh;
+        height: 100vh;
+        overflow: hidden;
+        position: fixed;
     }
     
     .menu-bar {
