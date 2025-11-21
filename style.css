@@ -82,29 +82,30 @@ html, body {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    margin-bottom: 5px;
-    padding: 10px;
+    margin-bottom: 3px;
+    padding: 6px 10px;
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 15px;
+    border-radius: 10px;
     backdrop-filter: blur(10px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    min-width: 600px;
-    max-width: 90%;
-    width: 100%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    min-width: 400px;
+    max-width: 70%;
+    width: auto;
 }
 
 .player {
     flex: 1;
+    min-width: 80px;
 }
 
 .player h2 {
     color: #fff;
-    margin-bottom: 10px;
-    font-size: 1.5em;
+    margin-bottom: 5px;
+    font-size: 1em;
 }
 
 .score {
-    font-size: 3em;
+    font-size: 2em;
     font-weight: bold;
     color: #ffd700;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
@@ -112,16 +113,16 @@ html, body {
 
 .controls {
     color: #fff;
-    margin-top: 10px;
-    font-size: 0.9em;
+    margin-top: 5px;
+    font-size: 0.75em;
     opacity: 0.8;
 }
 
 .vs {
-    font-size: 2em;
+    font-size: 1.5em;
     font-weight: bold;
     color: #fff;
-    margin: 0 20px;
+    margin: 0 15px;
 }
 
 #gameCanvas {
@@ -455,19 +456,19 @@ html, body {
 .mobile-start-btn {
     display: none;
     position: fixed;
-    bottom: 10px;
+    bottom: 5px;
     left: 50%;
     transform: translateX(-50%);
-    padding: 12px 35px;
-    font-size: 1.2em;
+    padding: 8px 25px;
+    font-size: 1em;
     font-weight: bold;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border: 3px solid #fff;
+    border: 2px solid #fff;
     border-radius: 50px;
     color: #fff;
     cursor: pointer;
     z-index: 100;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
     -webkit-user-select: none;
     user-select: none;
     touch-action: manipulation;
@@ -511,41 +512,42 @@ html, body {
     
     .scoreboard {
         min-width: auto;
-        width: 100%;
-        padding: 4px 8px;
-        margin-bottom: 3px;
-        flex-wrap: wrap;
+        width: auto;
+        max-width: 90%;
+        padding: 3px 6px;
+        margin-bottom: 2px;
+        flex-wrap: nowrap;
     }
     
     .player {
         flex: 1;
-        min-width: 100px;
+        min-width: 70px;
     }
     
     .player h2 {
-        font-size: 0.8em;
+        font-size: 0.7em;
         margin-bottom: 2px;
     }
     
     .score {
-        font-size: 1.4em;
+        font-size: 1.2em;
     }
     
     .controls {
-        font-size: 0.65em;
+        font-size: 0.6em;
         margin-top: 2px;
     }
     
     .vs {
-        font-size: 1.1em;
-        margin: 0 6px;
+        font-size: 0.9em;
+        margin: 0 4px;
     }
     
     .game-status {
-        font-size: 0.85em;
-        margin-top: 3px;
-        margin-bottom: 3px;
-        min-height: 22px;
+        font-size: 0.75em;
+        margin-top: 2px;
+        margin-bottom: 2px;
+        min-height: 18px;
     }
     
     .touch-button {
@@ -562,57 +564,78 @@ html, body {
 }
 
 @media (max-width: 900px) and (orientation: landscape) {
+    .menu-bar {
+        padding: 2px 6px;
+    }
+    
+    .menu-left h1 {
+        font-size: 0.7em;
+    }
+    
     .container {
-        height: calc(100vh - 50px);
+        height: 100vh;
+        padding: 1px;
     }
     
     .scoreboard {
         flex-direction: row;
-        padding: 5px 10px;
-        margin-bottom: 5px;
+        padding: 2px 8px;
+        margin-bottom: 1px;
+        max-width: 60%;
     }
     
     .player h2 {
-        font-size: 1em;
-        margin-bottom: 5px;
+        font-size: 0.65em;
+        margin-bottom: 1px;
     }
     
     .score {
-        font-size: 1.5em;
+        font-size: 1em;
     }
     
     .controls {
-        font-size: 0.7em;
+        font-size: 0.55em;
     }
     
     .vs {
-        font-size: 1.2em;
-        margin: 0 10px;
-    }
-    
-    #gameCanvas {
-        max-height: 75vh;
-    }
-    
-    .mobile-controls {
-        right: 10px;
-        gap: 15px;
-    }
-    
-    .touch-button {
-        width: 60px;
-        height: 60px;
-        font-size: 1.5em;
-    }
-    
-    .mobile-start-btn {
-        bottom: 15px;
-        padding: 15px 40px;
-        font-size: 1.2em;
+        font-size: 0.8em;
+        margin: 0 3px;
     }
     
     .game-status {
-        font-size: 1em;
-        margin-top: 5px;
+        font-size: 0.65em;
+        margin-top: 1px;
+        margin-bottom: 1px;
+        min-height: 15px;
+    }
+    
+    .mobile-start-btn {
+        padding: 5px 20px;
+        font-size: 0.85em;
+        bottom: 3px;
+    }
+    
+    .touch-button {
+        width: 45px;
+        height: 45px;
+        font-size: 1.2em;
+    }
+    
+    .help-btn, .reset-btn {
+        width: 24px;
+        height: 24px;
+        font-size: 0.85em;
+    }
+    
+    #gameCanvas {
+        max-height: none;
+    }
+}
+
+/* Landscape specific overrides for mobile controls */
+@media (max-width: 900px) and (orientation: landscape) {
+    .mobile-controls {
+        right: 8px;
+        gap: 10px;
     }
 }

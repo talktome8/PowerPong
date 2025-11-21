@@ -21,12 +21,12 @@ document.addEventListener('DOMContentLoaded', () => {
             // Check if mobile controls are visible
             const mobileControlsVisible = mobileControls && window.getComputedStyle(mobileControls).display !== 'none';
             const mobileStartVisible = mobileStartBtn && window.getComputedStyle(mobileStartBtn).display !== 'none';
-            const mobileStartHeight = mobileStartVisible ? mobileStartBtn.offsetHeight : 0;
+            const mobileStartHeight = mobileStartVisible ? mobileStartBtn.offsetHeight + 20 : 0; // Add margin
             
             // Calculate available space - use almost all of it!
             // Only subtract the actual UI elements, minimal padding
             const usedHeight = menuBarHeight + scoreboardHeight + statusHeight + mobileStartHeight;
-            const availableHeight = window.innerHeight - usedHeight - 15; // Just 15px total padding
+            const availableHeight = window.innerHeight - usedHeight - 10; // Just 10px total padding
             const availableWidth = window.innerWidth - 10; // Just 10px total padding
             
             // Maintain 2:1 aspect ratio
@@ -40,11 +40,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 canvasWidth = canvasHeight * aspectRatio;
             }
             
-            // Make sure we use at least 80% of available space
+            // Make sure we use at least 90% of available space
             const heightUsage = canvasHeight / availableHeight;
-            if (heightUsage < 0.8 && availableHeight > 200) {
-                canvasHeight = availableHeight * 0.95;
+            if (heightUsage < 0.9 && availableHeight > 200) {
+                canvasHeight = availableHeight * 0.98;
                 canvasWidth = canvasHeight * aspectRatio;
+                
+                // If width is now too wide, scale back down
+                if (canvasWidth > availableWidth) {
+                    canvasWidth = availableWidth * 0.98;
+                    canvasHeight = canvasWidth / aspectRatio;
+                }
             }
             
             // Ensure minimum size
@@ -54,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Set canvas display size (CSS)
             canvas.style.width = Math.floor(canvasWidth) + 'px';
             canvas.style.height = Math.floor(canvasHeight) + 'px';
-        }, 50);
+        }, 100); // Increased delay for orientation changes
     }
     
     // Initial resize
