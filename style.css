@@ -456,22 +456,23 @@ html, body {
 .mobile-start-btn {
     display: none;
     position: fixed;
-    bottom: 5px;
+    bottom: 2px;
     left: 50%;
     transform: translateX(-50%);
-    padding: 8px 25px;
-    font-size: 1em;
+    padding: 4px 15px;
+    font-size: 0.8em;
     font-weight: bold;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     border: 2px solid #fff;
-    border-radius: 50px;
+    border-radius: 25px;
     color: #fff;
     cursor: pointer;
-    z-index: 100;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
     -webkit-user-select: none;
     user-select: none;
     touch-action: manipulation;
+    opacity: 0.9;
 }
 
 .mobile-start-btn:active {
@@ -503,73 +504,78 @@ html, body {
     }
     
     .menu-bar {
-        padding: 4px 8px;
+        padding: 3px 6px;
     }
     
     .menu-left h1 {
-        font-size: 0.85em;
+        font-size: 0.75em;
     }
     
     .scoreboard {
         min-width: auto;
         width: auto;
-        max-width: 90%;
-        padding: 3px 6px;
+        max-width: 85%;
+        padding: 2px 4px;
         margin-bottom: 2px;
         flex-wrap: nowrap;
     }
     
     .player {
         flex: 1;
-        min-width: 70px;
+        min-width: 60px;
     }
     
     .player h2 {
-        font-size: 0.7em;
-        margin-bottom: 2px;
+        font-size: 0.65em;
+        margin-bottom: 1px;
     }
     
     .score {
-        font-size: 1.2em;
+        font-size: 1.1em;
     }
     
     .controls {
-        font-size: 0.6em;
-        margin-top: 2px;
+        font-size: 0.55em;
+        margin-top: 1px;
     }
     
     .vs {
-        font-size: 0.9em;
-        margin: 0 4px;
+        font-size: 0.85em;
+        margin: 0 3px;
     }
     
     .game-status {
-        font-size: 0.75em;
+        font-size: 0.7em;
         margin-top: 2px;
         margin-bottom: 2px;
-        min-height: 18px;
+        min-height: 16px;
     }
     
     .touch-button {
-        width: 55px;
-        height: 55px;
-        font-size: 1.4em;
+        width: 50px;
+        height: 50px;
+        font-size: 1.3em;
     }
     
     .help-btn, .reset-btn {
-        width: 28px;
-        height: 28px;
-        font-size: 0.95em;
+        width: 26px;
+        height: 26px;
+        font-size: 0.9em;
+    }
+    
+    .mobile-start-btn {
+        padding: 3px 12px;
+        font-size: 0.75em;
     }
 }
 
 @media (max-width: 900px) and (orientation: landscape) {
     .menu-bar {
-        padding: 2px 6px;
+        padding: 2px 4px;
     }
     
     .menu-left h1 {
-        font-size: 0.7em;
+        font-size: 0.65em;
     }
     
     .container {
@@ -579,52 +585,52 @@ html, body {
     
     .scoreboard {
         flex-direction: row;
-        padding: 2px 8px;
+        padding: 2px 6px;
         margin-bottom: 1px;
-        max-width: 60%;
+        max-width: 55%;
     }
     
     .player h2 {
-        font-size: 0.65em;
+        font-size: 0.6em;
         margin-bottom: 1px;
     }
     
     .score {
-        font-size: 1em;
+        font-size: 0.95em;
     }
     
     .controls {
-        font-size: 0.55em;
+        font-size: 0.5em;
     }
     
     .vs {
-        font-size: 0.8em;
-        margin: 0 3px;
+        font-size: 0.75em;
+        margin: 0 2px;
     }
     
     .game-status {
-        font-size: 0.65em;
+        font-size: 0.6em;
         margin-top: 1px;
         margin-bottom: 1px;
-        min-height: 15px;
+        min-height: 12px;
     }
     
     .mobile-start-btn {
-        padding: 5px 20px;
-        font-size: 0.85em;
-        bottom: 3px;
+        padding: 3px 15px;
+        font-size: 0.7em;
+        bottom: 2px;
     }
     
     .touch-button {
-        width: 45px;
-        height: 45px;
-        font-size: 1.2em;
+        width: 40px;
+        height: 40px;
+        font-size: 1.1em;
     }
     
     .help-btn, .reset-btn {
-        width: 24px;
-        height: 24px;
-        font-size: 0.85em;
+        width: 22px;
+        height: 22px;
+        font-size: 0.8em;
     }
     
     #gameCanvas {
