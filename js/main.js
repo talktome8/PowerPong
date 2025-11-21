@@ -20,13 +20,14 @@ document.addEventListener('DOMContentLoaded', () => {
         // Check if mobile/small screen
         const isMobile = window.innerWidth <= 900;
         
-        // Reserve space for mobile START button if on mobile (always account for it)
-        const mobileStartHeight = isMobile ? 25 : 0; // Reduced from 30px
+        // Reserve minimal space for mobile START button if on mobile
+        const mobileStartHeight = isMobile ? 22 : 0;
         
         // Calculate available space - MAXIMIZE IT!
         const usedHeight = menuBarHeight + scoreboardHeight + statusHeight + mobileStartHeight;
-        const availableHeight = window.innerHeight - usedHeight - 2; // Reduced from 5px to 2px
-        const availableWidth = window.innerWidth - 2; // Reduced from 5px to 2px
+        const padding = isMobile ? 4 : 10; // Much smaller padding on mobile
+        const availableHeight = window.innerHeight - usedHeight - padding;
+        const availableWidth = window.innerWidth - padding;
         
         // Maintain 2:1 aspect ratio
         const aspectRatio = 2;
