@@ -21,12 +21,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const isMobile = window.innerWidth <= 900;
         
         // Reserve space for mobile START button if on mobile (always account for it)
-        const mobileStartHeight = isMobile ? 30 : 0; // Fixed height reservation
+        const mobileStartHeight = isMobile ? 25 : 0; // Reduced from 30px
         
         // Calculate available space - MAXIMIZE IT!
         const usedHeight = menuBarHeight + scoreboardHeight + statusHeight + mobileStartHeight;
-        const availableHeight = window.innerHeight - usedHeight - 5; // Minimal 5px padding
-        const availableWidth = window.innerWidth - 5; // Minimal 5px padding
+        const availableHeight = window.innerHeight - usedHeight - 2; // Reduced from 5px to 2px
+        const availableWidth = window.innerWidth - 2; // Reduced from 5px to 2px
         
         // Maintain 2:1 aspect ratio
         const aspectRatio = 2;
@@ -146,6 +146,8 @@ document.addEventListener('DOMContentLoaded', () => {
         resetModeModal();
         updatePlayerNames('Computer 🤖', 'Player');
         updateControlDisplay('W/S Keys', 'Arrow Keys');
+        // Hide mobile controls for keyboard
+        document.getElementById('mobileControls').style.display = 'none';
     };
     
     wasdKeysBtn.onclick = () => {
@@ -154,6 +156,8 @@ document.addEventListener('DOMContentLoaded', () => {
         resetModeModal();
         updatePlayerNames('Computer 🤖', 'Player');
         updateControlDisplay('W/S Keys', 'W/S Keys');
+        // Hide mobile controls for keyboard
+        document.getElementById('mobileControls').style.display = 'none';
     };
     
     twoPlayerBtn.onclick = () => {
@@ -162,6 +166,8 @@ document.addEventListener('DOMContentLoaded', () => {
         resetModeModal();
         updatePlayerNames('Player 1', 'Player 2');
         updateControlDisplay('W/S Keys', '↑/↓ Keys');
+        // Hide mobile controls for two player keyboard mode
+        document.getElementById('mobileControls').style.display = 'none';
     };
     
     threePlayerBtn.onclick = () => {

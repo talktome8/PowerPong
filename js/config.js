@@ -8,8 +8,8 @@ const CONFIG = {
     WINNING_SCORE: 10,
     
     // Paddle
-    PADDLE_WIDTH: 15,
-    PADDLE_HEIGHT: 100,
+    PADDLE_WIDTH: 25,
+    PADDLE_HEIGHT: 130,
     PADDLE_SPEED: 8,
     PADDLE_OFFSET: 10,
     
