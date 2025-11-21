@@ -373,6 +373,18 @@ class Game {
             this.ball.dx *= CONFIG.SPEED_INCREASE_FACTOR;
             this.ball.dy *= CONFIG.SPEED_INCREASE_FACTOR;
             
+            // Shrink paddles gradually as difficulty increases (harder to block)
+            const shrinkFactor = 0.97; // Paddles get 3% smaller each level
+            this.player1.height *= shrinkFactor;
+            this.player1.baseHeight = this.player1.height;
+            this.player2.height *= shrinkFactor;
+            this.player2.baseHeight = this.player2.height;
+            
+            // Minimum paddle size to keep game playable
+            const minHeight = CONFIG.PADDLE_HEIGHT * 0.5; // Don't go below 50% of original
+            if (this.player1.height < minHeight) this.player1.height = this.player1.baseHeight = minHeight;
+            if (this.player2.height < minHeight) this.player2.height = this.player2.baseHeight = minHeight;
+            
             // Spawn more obstacles
             if (this.obstaclesActive && this.obstacles.length < 6) {
                 this.spawnObstacle();

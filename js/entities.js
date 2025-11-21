@@ -34,10 +34,10 @@ class Paddle {
             this.combo = 0;
         }
         
-        // Calculate speed - scale with difficulty to match faster ball speeds
-        // Base speed increases with difficulty multiplier (starts at 1.0, increases over time)
-        const baseSpeed = CONFIG.PADDLE_SPEED * (1.0 + (difficultyMultiplier - 1.0) * 0.8); // 80% of difficulty increase
-        const speed = (this.powerUp === 'speed' ? baseSpeed * 2.0 : baseSpeed * 1.2);
+        // Calculate speed - BALANCED with difficulty
+        // As difficulty increases, paddle stays same speed but gets SMALLER (harder to block)
+        const baseSpeed = CONFIG.PADDLE_SPEED * 1.2; // Consistent speed
+        const speed = (this.powerUp === 'speed' ? baseSpeed * 2.0 : baseSpeed);
         
         // Reset dy first
         this.dy = 0;
@@ -133,12 +133,8 @@ class Paddle {
             ctx.fillText(powerUpInfo.emoji, this.x - 10, this.y - 10);
         }
         
-        // Combo indicator
-        if (this.combo > 1) {
-            ctx.font = 'bold 16px Arial';
-            ctx.fillStyle = '#ffd700';
-            ctx.fillText(`x${this.combo}`, this.x - 5, this.y + this.height + 20);
-        }
+        // Combo indicator - REMOVED (confusing to players)
+        // Combo is tracked internally but not displayed
     }
     
     recordHit(currentTime) {
